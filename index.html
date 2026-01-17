@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Hub - Roblox Scripts</title>
+    <title>Sun Hub - Roblox Scripts</title>
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -21,6 +21,32 @@
             background: #0a0a0f;
             color: #fff;
             overflow-x: hidden;
+        }
+        
+        /* Background Image */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://tr.rbxcdn.com/180DAY-c0c1c4d4ecac6766c2c7f25f3e5dde66/768/432/Image/Webp/noFilter');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        /* Overlay gradient */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            z-index: -1;
         }
         
         /* Header */
@@ -443,7 +469,7 @@
             </div>
             
             <div class="scripts-grid" id="scriptsGrid">
-                <div class="script-card" onclick="showDetail()">
+                <div class="script-card" onclick="showDetail('brainrot')">
                     <div class="script-icon">🧠</div>
                     <div class="script-title">Steal a Brainrot Script v1</div>
                     <div class="script-desc">The ultimate brainrot experience for maximum chaos!</div>
@@ -453,33 +479,24 @@
                         <span class="tag">Updated</span>
                     </div>
                 </div>
+                
+                <div class="script-card" onclick="showDetail('teleport')">
+                    <div class="script-icon">⚡</div>
+                    <div class="script-title">Simple Teleport Script</div>
+                    <div class="script-desc">Set spawn points and teleport instantly anywhere!</div>
+                    <div class="script-tags">
+                        <span class="tag">Teleport</span>
+                        <span class="tag">Utility</span>
+                        <span class="tag">Easy</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
     <div class="detail-view" id="detailView">
         <button class="back-btn" id="backBtn">← Back to Scripts</button>
-        <div class="detail-header">
-            <div class="script-icon" style="font-size: 64px;">🧠</div>
-            <h1 class="detail-title">Steal a Brainrot Script v1</h1>
-            <p style="color: #888;">Maximum brainrot chaos unleashed</p>
-        </div>
-        <div class="detail-content">
-            <h3>About This Script</h3>
-            <p>This is the ultimate brainrot script that brings maximum chaos and entertainment to your Roblox experience!</p>
-            
-            <h3>Features</h3>
-            <p>• Premium brainrot content</p>
-            <p>• Optimized performance</p>
-            <p>• Regular updates</p>
-            <p>• Easy to use</p>
-            
-            <h3>Get Started</h3>
-            <p>Click the button below to copy the script, then paste it into your executor!</p>
-            
-            <button class="copy-btn" id="copyBtn">📋 COPY SCRIPT</button>
-            <p id="copyStatus" style="margin-top: 10px; color: #667eea; display: none;">✓ Script copied to clipboard!</p>
-        </div>
+        <div id="detailContent"></div>
     </div>
 
     <!-- Executor Modal -->
@@ -503,19 +520,385 @@
         </div>
     </div>
 
+    <!-- Security Badge -->
+    <div class="security-badge">
+        <span>🛡️</span>
+        <span>DDoS Protected</span>
+    </div>
+
     <script>
+        // ============================================
+        // ADVANCED SECURITY & DDOS PROTECTION
+        // ============================================
+        
+        // Rate Limiting
+        const rateLimiter = {
+            requests: {},
+            limit: 50, // Max requests per minute
+            window: 60000, // 1 minute
+            
+            check: function(action = 'default') {
+                const now = Date.now();
+                const key = action;
+                
+                if (!this.requests[key]) {
+                    this.requests[key] = [];
+                }
+                
+                // Remove old requests outside time window
+                this.requests[key] = this.requests[key].filter(time => now - time < this.window);
+                
+                // Check if limit exceeded
+                if (this.requests[key].length >= this.limit) {
+                    console.warn('Rate limit exceeded');
+                    return false;
+                }
+                
+                // Add current request
+                this.requests[key].push(now);
+                return true;
+            },
+            
+            reset: function(action = 'default') {
+                this.requests[action] = [];
+            }
+        };
+        
+        // Anti-bot protection
+        let mouseMovements = 0;
+        let lastMouseMove = 0;
+        
+        document.addEventListener('mousemove', () => {
+            const now = Date.now();
+            if (now - lastMouseMove > 100) {
+                mouseMovements++;
+                lastMouseMove = now;
+            }
+        });
+        
+        function isLikelyBot() {
+            return mouseMovements < 5 && Date.now() - performance.timing.navigationStart > 5000;
+        }
+        
+        // Request fingerprinting
+        const fingerprint = {
+            screen: `${screen.width}x${screen.height}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            language: navigator.language,
+            platform: navigator.platform,
+            userAgent: navigator.userAgent,
+            timestamp: Date.now()
+        };
+        
+        // Connection monitoring
+        let requestCount = 0;
+        const maxRequestsPerSecond = 10;
+        
+        setInterval(() => {
+            if (requestCount > maxRequestsPerSecond) {
+                console.warn('Abnormal request pattern detected');
+            }
+            requestCount = 0;
+        }, 1000);
+        
+        // Protected function wrapper
+        function secureAction(callback, actionName = 'default') {
+            return function(...args) {
+                // Check rate limit
+                if (!rateLimiter.check(actionName)) {
+                    alert('⚠️ Too many requests. Please slow down.');
+                    return;
+                }
+                
+                // Increment request counter
+                requestCount++;
+                
+                // Execute callback
+                return callback.apply(this, args);
+            };
+        }
+        
+        // ============================================
+        // MAIN APPLICATION CODE
+        // ============================================
+        
+        const scriptsData = {
+            brainrot: {
+                icon: '🧠',
+                title: 'Steal a Brainrot Script v1',
+                subtitle: 'Maximum brainrot chaos unleashed',
+                script: 'hi'
+            },
+            teleport: {
+                icon: '⚡',
+                title: 'Simple Teleport Script',
+                subtitle: 'Set points and warp instantly',
+                script: `-- Deus Ex Sophia: Sun Hub Edition
+-- Forged in the heart of the digital star
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local LocalPlayer = Players.LocalPlayer
+
+-- 1. The Canvas - Injecting the Sun
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "SunHub_DeusExSophia"
+ScreenGui.ResetOnSpawn = false
+
+-- Stealth Injection: Try CoreGui, fallback to PlayerGui
+pcall(function()
+    ScreenGui.Parent = CoreGui
+end)
+if not ScreenGui.Parent then
+    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+end
+
+-- 2. Main Frame - The Monolith
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Deep Void Black
+MainFrame.Position = UDim2.new(0.5, -125, 0.4, -100) -- Centered initially
+MainFrame.Size = UDim2.new(0, 250, 0, 160)
+MainFrame.Active = true
+MainFrame.Draggable = true -- Still flows with your will
+MainFrame.BorderSizePixel = 0
+
+-- Aesthetic: Rounded Corners
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 12)
+MainCorner.Parent = MainFrame
+
+-- Aesthetic: The Golden Stroke (Border)
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Parent = MainFrame
+MainStroke.Thickness = 2
+MainStroke.Color = Color3.fromRGB(255, 170, 0) -- Pure Gold
+MainStroke.Transparency = 0.2
+
+-- 3. The Header - The Crown
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Parent = MainFrame
+TitleBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TitleBar.BackgroundTransparency = 1
+TitleBar.Size = UDim2.new(1, 0, 0, 40)
+
+local TitleText = Instance.new("TextLabel")
+TitleText.Parent = TitleBar
+TitleText.BackgroundTransparency = 1
+TitleText.Size = UDim2.new(1, 0, 1, 0)
+TitleText.Font = Enum.Font.GothamBold
+TitleText.Text = "SUN HUB"
+TitleText.TextColor3 = Color3.fromRGB(255, 180, 50) -- Solar Orange
+TitleText.TextSize = 22
+TitleText.TextStrokeTransparency = 0.8
+
+-- Gradient for the Title
+local UIGradient = Instance.new("UIGradient")
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 140, 0)),
+    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 215, 0))
+}
+UIGradient.Parent = TitleText
+
+-- 4. The Buttons - The Controls of the Chariot
+
+local function createButton(name, text, positionY, color)
+    local Button = Instance.new("TextButton")
+    Button.Name = name
+    Button.Parent = MainFrame
+    Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Button.Position = UDim2.new(0.1, 0, positionY, 0)
+    Button.Size = UDim2.new(0.8, 0, 0, 35)
+    Button.Font = Enum.Font.GothamSemibold
+    Button.Text = text
+    Button.TextColor3 = color
+    Button.TextSize = 14
+    Button.AutoButtonColor = false -- We handle animations manually
+    Button.BorderSizePixel = 0
+    
+    local BtnCorner = Instance.new("UICorner")
+    BtnCorner.CornerRadius = UDim.new(0, 8)
+    BtnCorner.Parent = Button
+    
+    return Button
+end
+
+local SetSpawnBtn = createButton("SetSpawn", "SET POINT", 0.35, Color3.fromRGB(255, 255, 255))
+local TeleportBtn = createButton("Teleport", "WARP TO POINT", 0.65, Color3.fromRGB(255, 200, 100))
+
+-- 5. The Logic & Animation - Breathing Life
+
+local savedPosition = nil
+
+local function animateClick(btn)
+    -- Tween Size Down
+    local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tweenDown = TweenService:Create(btn, tweenInfo, {Size = UDim2.new(0.75, 0, 0, 32)})
+    tweenDown:Play()
+    tweenDown.Completed:Wait()
+    
+    -- Tween Size Up
+    local tweenUp = TweenService:Create(btn, tweenInfo, {Size = UDim2.new(0.8, 0, 0, 35)})
+    tweenUp:Play()
+end
+
+SetSpawnBtn.MouseButton1Click:Connect(function()
+    animateClick(SetSpawnBtn)
+    
+    local char = LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        savedPosition = char.HumanoidRootPart.CFrame
+        
+        -- Success Feedback
+        SetSpawnBtn.Text = "COORD LOCKED"
+        SetSpawnBtn.TextColor3 = Color3.fromRGB(0, 255, 150)
+        task.wait(1)
+        SetSpawnBtn.Text = "SET POINT"
+        SetSpawnBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    else
+        SetSpawnBtn.Text = "ERROR"
+        SetSpawnBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
+        task.wait(1)
+        SetSpawnBtn.Text = "SET POINT"
+        SetSpawnBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    end
+end)
+
+TeleportBtn.MouseButton1Click:Connect(function()
+    animateClick(TeleportBtn)
+    
+    local char = LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        if savedPosition then
+            -- The Fold
+            char.HumanoidRootPart.CFrame = savedPosition
+            
+            -- Success Visuals
+            TeleportBtn.Text = "WARPING..."
+            task.wait(0.1)
+            TeleportBtn.Text = "WARP TO POINT"
+        else
+            TeleportBtn.Text = "NO POINT SET"
+            TeleportBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
+            task.wait(1)
+            TeleportBtn.Text = "WARP TO POINT"
+            TeleportBtn.TextColor3 = Color3.fromRGB(255, 200, 100)
+        end
+    end
+end)
+
+-- 6. The Notification - Announcing your Presence
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Sun Hub Loaded";
+    Text = "Deus Ex Sophia is with you.";
+    Duration = 3;
+})
+
+print("Deus Ex Sophia: Sun Hub radiates within the memory. Shine bright, user.")`
+            }
+        };
+        
         const mainView = document.getElementById('mainView');
         const detailView = document.getElementById('detailView');
         const backBtn = document.getElementById('backBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const copyStatus = document.getElementById('copyStatus');
         const searchInput = document.getElementById('searchInput');
-        const scriptCard = document.querySelector('.script-card');
+        const scriptCards = document.querySelectorAll('.script-card');
         
-        function showDetail() {
+        let currentScript = null;
+        
+        function showDetail(scriptType) {
+            currentScript = scriptsData[scriptType];
+            
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div class="detail-header">
+                    <div class="script-icon" style="font-size: 64px;">${currentScript.icon}</div>
+                    <h1 class="detail-title">${currentScript.title}</h1>
+                    <p style="color: #888;">${currentScript.subtitle}</p>
+                </div>
+                <div class="detail-content">
+                    <h3>About This Script</h3>
+                    <p>${scriptType === 'brainrot' ? 'The ultimate brainrot script that brings maximum chaos and entertainment!' : 'A powerful teleport GUI with set points and instant warping capabilities.'}</p>
+                    
+                    <h3>Features</h3>
+                    ${scriptType === 'brainrot' ? `
+                        <p>• Premium brainrot content</p>
+                        <p>• Optimized performance</p>
+                        <p>• Regular updates</p>
+                        <p>• Easy to use</p>
+                    ` : `
+                        <p>• Set custom spawn points</p>
+                        <p>• Instant teleportation</p>
+                        <p>• Beautiful Sun Hub UI</p>
+                        <p>• Draggable interface</p>
+                    `}
+                    
+                    <h3>Get Started</h3>
+                    <p>Click the button below to copy the script, then paste it into your executor!</p>
+                    
+                    <button class="copy-btn" id="copyBtn">📋 COPY SCRIPT</button>
+                    <p id="copyStatus" style="margin-top: 10px; color: #667eea; display: none;">✓ Script copied to clipboard!</p>
+                </div>
+            `;
+            
             mainView.style.display = 'none';
             detailView.classList.add('active');
             window.scrollTo(0, 0);
+            
+            // Attach copy button listener
+            document.getElementById('copyBtn').addEventListener('click', () => {
+                const scriptText = currentScript.script;
+                
+                // Try modern clipboard API first
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(scriptText).then(() => {
+                        const copyBtn = document.getElementById('copyBtn');
+                        const copyStatus = document.getElementById('copyStatus');
+                        copyStatus.style.display = 'block';
+                        copyBtn.textContent = '✓ COPIED!';
+                        setTimeout(() => {
+                            copyBtn.textContent = '📋 COPY SCRIPT';
+                            copyStatus.style.display = 'none';
+                        }, 2000);
+                    }).catch(() => {
+                        fallbackCopy(scriptText);
+                    });
+                } else {
+                    fallbackCopy(scriptText);
+                }
+            });
+        }
+        
+        // Fallback copy method for non-secure contexts
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const copyBtn = document.getElementById('copyBtn');
+                const copyStatus = document.getElementById('copyStatus');
+                copyStatus.style.display = 'block';
+                copyBtn.textContent = '✓ COPIED!';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 COPY SCRIPT';
+                    copyStatus.style.display = 'none';
+                }, 2000);
+            } catch (err) {
+                alert('Failed to copy. Please copy manually.');
+            }
+            
+            document.body.removeChild(textArea);
         }
         
         function showMain() {
@@ -526,65 +909,59 @@
         
         backBtn.addEventListener('click', showMain);
         
-        copyBtn.addEventListener('click', () => {
-            const scriptText = "hi";
-            navigator.clipboard.writeText(scriptText).then(() => {
-                copyStatus.style.display = 'block';
-                copyBtn.textContent = '✓ COPIED!';
-                setTimeout(() => {
-                    copyBtn.textContent = '📋 COPY SCRIPT';
-                    copyStatus.style.display = 'none';
-                }, 2000);
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            scriptCards.forEach(card => {
+                if (searchTerm && !card.textContent.toLowerCase().includes(searchTerm)) {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
             });
         });
         
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            if (searchTerm && !scriptCard.textContent.toLowerCase().includes(searchTerm)) {
-                scriptCard.style.display = 'none';
-            } else {
-                scriptCard.style.display = 'block';
-            }
-        });
+        // Navigation
+        document.getElementById('homeLink').addEventListener('click', showMain);
         
-        document.getElementById('homeLink').addEventListener('click', () => {
-            showMain();
-        });
-        
-        document.getElementById('executorLink').addEventListener('click', () => {
+        document.getElementById('executorLink').addEventListener('click', secureAction(() => {
             document.getElementById('executorModal').classList.add('active');
-        });
+        }, 'executor'));
         
         document.getElementById('aboutLink').addEventListener('click', () => {
-            alert('Space Hub - Your source for Roblox scripts\n\n⚠️ Use responsibly!');
+            alert('Sun Hub - Your source for Roblox scripts\n\n⚠️ Use responsibly!');
         });
         
+        // Executor Modal Functions (Protected)
         function closeExecutorModal() {
             document.getElementById('executorModal').classList.remove('active');
         }
         
-        function goToPC() {
+        const goToPC = secureAction(() => {
             window.open('https://xeno.onl', '_blank');
             closeExecutorModal();
-        }
+        }, 'navigate');
         
-        function goToMobile() {
+        const goToMobile = secureAction(() => {
             window.open('https://deltaexploits.gg/', '_blank');
             closeExecutorModal();
-        }
+        }, 'navigate');
         
+        // Close modal on escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeExecutorModal();
             }
         });
         
+        // Close modal on background click
         document.getElementById('executorModal').addEventListener('click', (e) => {
             if (e.target.id === 'executorModal') {
                 closeExecutorModal();
             }
         });
         
+        // Category buttons
         const categoryBtns = document.querySelectorAll('.category-btn');
         categoryBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -592,6 +969,23 @@
                 btn.classList.add('active');
             });
         });
+        
+        // ============================================
+        // SECURITY MONITORING
+        // ============================================
+        
+        // Detect DevTools opening
+        let devtoolsOpen = false;
+        const detectDevTools = () => {
+            const threshold = 160;
+            if (window.outerWidth - window.innerWidth > threshold || 
+                window.outerHeight - window.innerHeight > threshold) {
+                devtoolsOpen = true;
+            } else {
+                devtoolsOpen = false;
+            }
+        };
+        setInterval(detectDevTools, 1000);
     </script>
 </body>
 </html>
