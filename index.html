@@ -18,11 +18,11 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
+            background: #0a0a0f;
             color: #fff;
             overflow-x: hidden;
         }
-
+        
         /* Header */
         .header {
             background: rgba(15, 15, 20, 0.95);
@@ -70,7 +70,7 @@
         .nav a:hover {
             color: #667eea;
         }
-
+        
         /* Search Section */
         .search-section {
             max-width: 1200px;
@@ -109,7 +109,7 @@
             color: #667eea;
             font-size: 20px;
         }
-
+        
         /* Categories */
         .categories {
             display: flex;
@@ -135,7 +135,7 @@
             border-color: transparent;
             transform: translateY(-2px);
         }
-
+        
         /* Scripts Grid */
         .scripts-grid {
             display: grid;
@@ -209,11 +209,389 @@
             font-size: 11px;
             color: #667eea;
         }
+        
+        /* Detail View */
+        .detail-view {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: none;
+        }
+        
+        .detail-view.active {
+            display: block;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(30, 30, 40, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #667eea;
+        }
+        
+        .detail-header {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .detail-content {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+        }
+        
+        .detail-content h3 {
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .detail-content p {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
 
-        /* (Everything below remains exactly the same) */
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: rgba(20, 20, 30, 0.95);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modal-subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .device-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .device-btn {
+            flex: 1;
+            padding: 20px;
+            background: rgba(30, 30, 40, 0.6);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .device-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .device-icon {
+            font-size: 48px;
+        }
+        
+        .close-modal {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Security Badge */
+        .security-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: #0f0;
+            font-size: 12px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
-    <!-- BODY CONTENT UNCHANGED -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">⚡ SPACE HUB</div>
+            <nav class="nav">
+                <a id="homeLink">HOME</a>
+                <a id="executorLink">EXECUTOR</a>
+                <a id="aboutLink">ABOUT</a>
+            </nav>
+        </div>
+    </div>
+    
+    <div id="mainView">
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search for scripts...">
+                <span class="search-icon">🔍</span>
+            </div>
+            
+            <div class="categories">
+                <button class="category-btn active" data-category="all">All Scripts</button>
+                <button class="category-btn" data-category="popular">Popular</button>
+                <button class="category-btn" data-category="sab">Steal a Brainrot Scripts</button>
+            </div>
+            
+            <div class="scripts-grid" id="scriptsGrid">
+                <div class="script-card" onclick="showDetail()">
+                    <div class="script-icon">🧠</div>
+                    <div class="script-title">Steal a Brainrot Script v1</div>
+                    <div class="script-desc">The ultimate brainrot experience for maximum chaos!</div>
+                    <div class="script-tags">
+                        <span class="tag">Brainrot</span>
+                        <span class="tag">Premium</span>
+                        <span class="tag">Updated</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="detail-view" id="detailView">
+        <button class="back-btn" id="backBtn">← Back to Scripts</button>
+        <div class="detail-header">
+            <div class="script-icon" style="font-size: 64px;">🧠</div>
+            <h1 class="detail-title">Steal a Brainrot Script v1</h1>
+            <p style="color: #888;">Maximum brainrot chaos unleashed</p>
+        </div>
+        <div class="detail-content">
+            <h3>About This Script</h3>
+            <p>This is the ultimate brainrot script that brings maximum chaos and entertainment to your Roblox experience!</p>
+            
+            <h3>Features</h3>
+            <p>• Premium brainrot content</p>
+            <p>• Optimized performance</p>
+            <p>• Regular updates</p>
+            <p>• Easy to use</p>
+            
+            <h3>Get Started</h3>
+            <p>Click the button below to copy the script, then paste it into your executor!</p>
+            
+            <button class="copy-btn" id="copyBtn">📋 COPY SCRIPT</button>
+            <p id="copyStatus" style="margin-top: 10px; color: #667eea; display: none;">✓ Script copied to clipboard!</p>
+        </div>
+    </div>
+
+    <!-- Executor Modal -->
+    <div class="modal" id="executorModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Select Your Device</h2>
+            <p class="modal-subtitle">Choose your platform to get the executor</p>
+            
+            <div class="device-buttons">
+                <button class="device-btn" onclick="goToPC()">
+                    <span class="device-icon">💻</span>
+                    <span>PC</span>
+                </button>
+                <button class="device-btn" onclick="goToMobile()">
+                    <span class="device-icon">📱</span>
+                    <span>MOBILE</span>
+                </button>
+            </div>
+            
+            <button class="close-modal" onclick="closeExecutorModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const mainView = document.getElementById('mainView');
+        const detailView = document.getElementById('detailView');
+        const backBtn = document.getElementById('backBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyStatus = document.getElementById('copyStatus');
+        const searchInput = document.getElementById('searchInput');
+        const scriptCard = document.querySelector('.script-card');
+        
+        function showDetail() {
+            mainView.style.display = 'none';
+            detailView.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function showMain() {
+            mainView.style.display = 'block';
+            detailView.classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+        
+        backBtn.addEventListener('click', showMain);
+        
+        copyBtn.addEventListener('click', () => {
+            const scriptText = "hi";
+            navigator.clipboard.writeText(scriptText).then(() => {
+                copyStatus.style.display = 'block';
+                copyBtn.textContent = '✓ COPIED!';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 COPY SCRIPT';
+                    copyStatus.style.display = 'none';
+                }, 2000);
+            });
+        });
+        
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm && !scriptCard.textContent.toLowerCase().includes(searchTerm)) {
+                scriptCard.style.display = 'none';
+            } else {
+                scriptCard.style.display = 'block';
+            }
+        });
+        
+        document.getElementById('homeLink').addEventListener('click', () => {
+            showMain();
+        });
+        
+        document.getElementById('executorLink').addEventListener('click', () => {
+            document.getElementById('executorModal').classList.add('active');
+        });
+        
+        document.getElementById('aboutLink').addEventListener('click', () => {
+            alert('Space Hub - Your source for Roblox scripts\n\n⚠️ Use responsibly!');
+        });
+        
+        function closeExecutorModal() {
+            document.getElementById('executorModal').classList.remove('active');
+        }
+        
+        function goToPC() {
+            window.open('https://xeno.onl', '_blank');
+            closeExecutorModal();
+        }
+        
+        function goToMobile() {
+            window.open('https://deltaexploits.gg/', '_blank');
+            closeExecutorModal();
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeExecutorModal();
+            }
+        });
+        
+        document.getElementById('executorModal').addEventListener('click', (e) => {
+            if (e.target.id === 'executorModal') {
+                closeExecutorModal();
+            }
+        });
+        
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
